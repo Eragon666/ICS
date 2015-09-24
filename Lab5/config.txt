@@ -4,6 +4,7 @@
     'prevalence': 23, # The end-goal or stable prevalence value
     'pop-human': 2000, # Total human population at start
     'pop-mosq': 6000, # Total mosquito population at start
+    'max-mosq': 25, # Max number of mosquitos per square
     'vector-density': 0.12, # Percentage of infected mosquitos, initial.
     'death-rate': '0.007', # Change of dying after infection
     'death-delay': '',
