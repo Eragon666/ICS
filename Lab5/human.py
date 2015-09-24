@@ -7,4 +7,7 @@ class human:
         self.y = y
         self.status = status
 
-        print 'at your service!'
+        if (self.status == 1):
+            print 'No I am infected, I dont want Malaria :('
+        else:
+            print 'wohoo I am save!'
