@@ -1,4 +1,6 @@
 {
+    'grid-x': 512, # Max x for grid
+    'grid-y': 512, # Max y for grid
     'prevalence': 23, # The end-goal or stable prevalence value
     'pop-human': 2000, # Total human population at start
     'pop-mosq': 6000, # Total mosquito population at start

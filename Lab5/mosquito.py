@@ -7,6 +7,6 @@ class mosquito:
         self.y = y
         self.status = status
         
-        if status == 1:
-            print 'I want your blood, and your life mwuhahahaha'
+        #if status == 1:
+            #print 'I want your blood, and your life mwuhahahaha'
 

@@ -4,6 +4,8 @@ import ast
 
 import mosquito as m
 import human as h
+
+import numpy as np
 import random
 
 
@@ -27,13 +29,20 @@ class simulation():
         # init-distr-human config value
         infected = random.sample(xrange(popHuman), int(nrinfected))
 
+        # Numpy array with the size of the grix
+        grid = np.ndarray(shape=(config['grid-x'] +1, config['grid-y'] + 1), dtype=object)
+
         for i in range(1, popHuman):
             if i in infected:
                 status = 1 #Infected
             else:
                 status = 0 #Not infected
 
-            h.human(1,2,status)
+            coordinates = self.getCoordinates()
+            x = coordinates[0]
+            y = coordinates[1]
+
+            grid[x][y] = h.human(x, y,status)
 
         nrinfected = popMosq*config['init-distr-mosq']
 
@@ -45,7 +54,17 @@ class simulation():
             else:
                 status = 0
 
+            coordinates = self.getCoordinates()
+            x = coordinates[0]
+            y = coordinates[1]
+
             m.mosquito(1,2,status)
+
+    def getCoordinates(self):
+        x = random.randint(0, self.config['grid-x'])
+        y = random.randint(0, self.config['grid-y'])
+
+        return (x, y)
 
 if __name__ == '__main__':
 

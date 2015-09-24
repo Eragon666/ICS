@@ -10,4 +10,4 @@ class human:
         if (self.status == 1):
             print 'No I am infected, I dont want Malaria :('
         else:
-            print 'wohoo I am save!'
+            print 'wohoo I am save at '+ str(x) + ', ' + str(y) + ' !'
