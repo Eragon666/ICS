@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import ast
-import gc
+import time
 
 import mosquito as m
 import human as h
@@ -16,6 +16,7 @@ class simulation():
     def __init__(self, config):
         """ Initialize the class and save the config """
         self.config = config
+        self.t = 0
 
     def initalizeGrid(self):
         """ Initialize the grid and the human and mosquito classes """
@@ -26,24 +27,12 @@ class simulation():
             config['grid-y']), dtype=object)
 
         # Add a grid instance to the array
-        for (x,y), value in np.ndenumerate(self.grid):
-            self.grid[x][y] = g.grid(x, y)
+        for x in xrange(0, config['grid-y']):
+            for y in xrange(0, config['grid-x']):
+                self.grid[x][y] = g.grid(x, y)
 
-        #self.addHumans()
+        self.addHumans()
         self.addMosquitos()
-
-        # Twee opties om de grid op te slaan: 
-        # 1: Zoals het nu ongeveer is, 1 human grid en 1 los mosquito grid.
-        # Beetje vaag zo aangezien ik niet goed weet hoe groot je die mosquito
-        # grid moet maken (de derde array) zodat je er meerdere mosquitos op
-        # kan zetten. En dan heb je een hele hoop lege array keys, en je weet
-        # niet precies welke daar nou vol van zitten.
-        # 2: Een class per grid vlakje, dus bij grid.py met daarin een class
-        # die dan heeft opgeslagen of er een mens is (met de object/link naar
-        # die class), en vervolgens een list die je kan appenden met mosquitos.
-        # Je kan in die class dan dus ook lokale berekening doen, hoeveel
-        # muggen komen hier bijvoorbeeld. En daar checken of het mens die daar
-        # zit wordt gestoken etc.
 
     def addHumans(self):
         """Add humans to the grid, only one human can be on each field"""
@@ -58,9 +47,7 @@ class simulation():
         # init-distr-human config value
         infected = (np.random.rand(popHuman) > config['init-distr-human']).astype(int)
 
-        for i in range(0, popHuman-1):
-            status = infected[i]
-
+        for i in xrange(0, popHuman-1):
             found = False
 
             # Make sure that every grid place has only one human
@@ -70,10 +57,7 @@ class simulation():
                 if (grid[x][y].checkFreedom() == True):
                     found = True
 
-            if i%10000 == 0:
-                print i
-
-            grid[x][y].moveIn(h.human(x, y,status))
+            grid[x][y].moveIn(h.human(x, y, infected[i]))
 
     def addMosquitos(self):
         """ Add the mosquitos to the grid, there can be humans and mosquitos on
@@ -85,24 +69,62 @@ class simulation():
         # Get the numbers of mosquitos in the initial state
         popMosq = int(config['pop-mosq'])
 
+        # Generate for each mosquito if it's infected or not and if it's hungry 
+        # in the initial state. Based on the initial distribution.
         infected = (np.random.rand(popMosq) > config['init-distr-mosq']).astype(int)
-        print infected
+        hungry = (np.random.rand(popMosq) > config['init-hungry-mosq']).astype(int)
 
-        for i in range(1, popMosq-1):
-            status = infected[i]
-
+        for i in xrange(1, popMosq-1):
             (x,y) = self.getCoordinates()
 
-            if i%10000 == 0:
-                print i
-
-            grid[x][y].flyIn(m.mosquito(x,y,status))
+            grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i]))
 
     def getCoordinates(self):
+        """ Generate a pair of coordinates, return it as a tuple"""
         x = random.randint(0, self.config['grid-x'] - 1)
         y = random.randint(0, self.config['grid-y'] - 1)
 
         return (x, y)
+
+    def step(self):
+        """ Do all the steps """
+
+        self.t += 1
+
+        for x in xrange(0, config['grid-y']):
+            for y in xrange(0, config['grid-x']):
+                self.stepMosquitos(x, y)
+
+    def stepMosquitos(self, x, y):
+        """ Calculate the step for the mosquitos """
+        #mosquitos = self.grid[x][y].getMosquitos()
+        #self.grid[x][y].clearMosquitos()
+
+        #for mosquito in mosquitos:
+        #    (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
+        #    self.grid[x][y].flyIn(mosquito)
+
+        # Loop through the list of mosquitos and remove the mosquito from the
+        # list if checkMosquito returns False
+        self.grid[x][y].mosquitos[:] = [ z for z in self.grid[x][y].mosquitos
+                if self.checkMosquito(z, (x,y)) ]
+
+
+    def checkMosquito(self, mosquito, current):
+        """ Check if the mosquitos stays in the same place """
+
+        # Do the calculations for the next position of the mosquito
+        (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
+
+        # If the mosquito did not move, return True
+        if current == (x, y):
+            return True
+
+        # Else place the mosquito in another cell and return False so the
+        # mosquitos gets removed from the current field
+        self.grid[x][y].flyIn(mosquito)
+        return False
+
 
 if __name__ == '__main__':
 
@@ -111,4 +133,17 @@ if __name__ == '__main__':
 
     sim = simulation(config)
 
+    start = time.time()
     sim.initalizeGrid()
+    end = time.time()
+    print end-start
+
+    startSteps = time.time()
+
+    for i in xrange(10):
+        sim.step()
+
+    endSteps = time.time()
+
+    print (endSteps-startSteps)/10
+

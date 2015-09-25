@@ -1,7 +1,6 @@
 #!/usr/bin/pythony
 
 import numpy as np
-import gc
 
 class grid:
 
@@ -9,8 +8,7 @@ class grid:
         self.x = x
         self.y = y
         self.human = None
-        self.mosquito = []
-        gc.disable()
+        self.mosquitos = []
 
     def checkFreedom(self):
         """Check if the human can live here or that there is already an
@@ -31,5 +29,13 @@ class grid:
     def flyIn(self, mosquito):
         """Fly the mosquito into the cell, multiple mosquitos can be in one
         cell"""
-        self.mosquito.append(mosquito)
+        self.mosquitos.append(mosquito)
+
+    def getMosquitos(self):
+        """ return the list of mosquitos in this cell """
+        return self.mosquitos
+
+    def clearMosquitos(self):
+        """ Clear the list of mosquitos in this cell """
+        self.mosquitos = []
 
