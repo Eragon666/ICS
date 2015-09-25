@@ -97,8 +97,6 @@ class simulation():
 
             (x,y) = self.getCoordinates()
 
-            c = self.getCoordinates()
-
             if i%10000 == 0:
                 print i
 
