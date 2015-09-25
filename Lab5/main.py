@@ -4,6 +4,7 @@ import ast
 
 import mosquito as m
 import human as h
+import grid as g
 
 import numpy as np
 import random
@@ -19,14 +20,16 @@ class simulation():
         """ Initialize the grid and the human and mosquito classes """
         config = self.config
 
-        # Numpy array with the size of the grix
-        self.humanGrid = np.ndarray(shape=(config['grid-x'] +1, 
-            config['grid-y'] + 1), dtype=object)
+        # Numpy array with the size of the grid
+        self.grid = np.ndarray(shape=(config['grid-x'],
+            config['grid-y']), dtype=object)
 
-        self.mosquitoGrid = np.ndarray(shape=(config['grid-x'] + 1,
-            config['grid-y'] + 1, config['max-mosq']), dtype=object)
+        # Add a grid instance to the array
+        for (x,y), value in np.ndenumerate(self.grid):
+            self.grid[x][y] = g.grid(x, y)
 
         self.addHumans()
+        self.addMosquitos()
 
         # Twee opties om de grid op te slaan: 
         # 1: Zoals het nu ongeveer is, 1 human grid en 1 los mosquito grid.
@@ -39,13 +42,13 @@ class simulation():
         # die class), en vervolgens een list die je kan appenden met mosquitos.
         # Je kan in die class dan dus ook lokale berekening doen, hoeveel
         # muggen komen hier bijvoorbeeld. En daar checken of het mens die daar
-        # zit wordt gestoken etc. 
+        # zit wordt gestoken etc.
 
     def addHumans(self):
         """Add humans to the grid, only one human can be on each field"""
 
         config = self.config
-        humanGrid = self.humanGrid
+        grid = self.grid
 
         # Get the numbers of humans in the initial state
         popHuman = int(config['pop-human'])
@@ -56,7 +59,7 @@ class simulation():
         # init-distr-human config value
         infected = random.sample(xrange(popHuman), int(nrinfected))
 
-        for i in range(1, popHuman):
+        for i in range(0, popHuman-1):
             if i in infected:
                 status = 1 #Infected
             else:
@@ -70,10 +73,13 @@ class simulation():
                 x = coordinates[0]
                 y = coordinates[1]
 
-                if (grid[x][y] == None):
+                if (grid[x][y].checkFreedom() == True):
                     found = True
 
-            humanGrid[x][y] = h.human(x, y,status)
+            if i%1000 == 0:
+                print i
+
+            grid[x][y].moveIn(h.human(x, y,status))
 
     def addMosquitos(self):
         """ Add the mosquitos to the grid, there can be humans and mosquitos on
@@ -83,13 +89,13 @@ class simulation():
         grid = self.grid
 
         # Get the numbers of mosquitos in the initial state
-        popMosq = int(config['pop-human'])
+        popMosq = int(config['pop-mosq'])
 
         nrinfected = popMosq*config['init-distr-mosq']
 
         infected = random.sample(xrange(popMosq), int(nrinfected))
 
-        for i in range(1, popMosq):
+        for i in range(1, popMosq-1):
             if i in infected:
                 status = 1 #infected
             else:
@@ -99,11 +105,14 @@ class simulation():
             x = coordinates[0]
             y = coordinates[1]
 
-            m.mosquito(1,2,status)
+            if i%1000 == 0:
+                print i
+
+            grid[x][y].flyIn(m.mosquito(1,2,status))
 
     def getCoordinates(self):
-        x = random.randint(0, self.config['grid-x'])
-        y = random.randint(0, self.config['grid-y'])
+        x = random.randint(0, self.config['grid-x'] - 1)
+        y = random.randint(0, self.config['grid-y'] - 1)
 
         return (x, y)
 
