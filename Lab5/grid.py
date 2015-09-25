@@ -1,12 +1,17 @@
 #!/usr/bin/pythony
 
+import numpy as np
+import gc
+
 class grid:
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.human = None
-        self.mosquito = []
+        self.mosquito = np.ndarray(shape=(25), dtype=object)
+        self.nrmosquito = 0
+        gc.disable()
 
     def checkFreedom(self):
         """Check if the human can live here or that there is already an
@@ -27,4 +32,5 @@ class grid:
     def flyIn(self, mosquito):
         """Fly the mosquito into the cell, multiple mosquitos can be in one
         cell"""
-        self.mosquito.append(mosquito)
+        self.mosquito[self.nrmosquito] = mosquito
+        self.nrmosquito += 1

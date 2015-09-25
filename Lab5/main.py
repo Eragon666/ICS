@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import ast
+import gc
 
 import mosquito as m
 import human as h
@@ -28,7 +29,7 @@ class simulation():
         for (x,y), value in np.ndenumerate(self.grid):
             self.grid[x][y] = g.grid(x, y)
 
-        self.addHumans()
+        #self.addHumans()
         self.addMosquitos()
 
         # Twee opties om de grid op te slaan: 
@@ -69,17 +70,15 @@ class simulation():
 
             # Make sure that every grid place has only one human
             while (not found):
-                coordinates = self.getCoordinates()
-                x = coordinates[0]
-                y = coordinates[1]
+                c = self.getCoordinates()
 
-                if (grid[x][y].checkFreedom() == True):
+                if (grid[c[0]][c[1]].checkFreedom() == True):
                     found = True
 
-            if i%1000 == 0:
+            if i%10000 == 0:
                 print i
 
-            grid[x][y].moveIn(h.human(x, y,status))
+            grid[c[0]][c[1]].moveIn(h.human(c[0], c[1],status))
 
     def addMosquitos(self):
         """ Add the mosquitos to the grid, there can be humans and mosquitos on
@@ -96,19 +95,19 @@ class simulation():
         infected = random.sample(xrange(popMosq), int(nrinfected))
 
         for i in range(1, popMosq-1):
-            if i in infected:
-                status = 1 #infected
-            else:
-                status = 0
+            #if i in infected:
+            #    status = 1 #infected
+            #else:
+            #    status = 0
 
-            coordinates = self.getCoordinates()
-            x = coordinates[0]
-            y = coordinates[1]
+            status = 0
 
-            if i%1000 == 0:
+            c = self.getCoordinates()
+
+            if i%10000 == 0:
                 print i
 
-            grid[x][y].flyIn(m.mosquito(1,2,status))
+            grid[c[0]][c[1]].flyIn(m.mosquito(c[0],c[1],status))
 
     def getCoordinates(self):
         x = random.randint(0, self.config['grid-x'] - 1)
