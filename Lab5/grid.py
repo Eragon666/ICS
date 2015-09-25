@@ -27,4 +27,4 @@ class grid:
     def flyIn(self, mosquito):
         """Fly the mosquito into the cell, multiple mosquitos can be in one
         cell"""
-        self.mosquito.append(mosquito)
+        #self.mosquito.append(mosquito)

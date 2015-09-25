@@ -53,25 +53,21 @@ class simulation():
         # Get the numbers of humans in the initial state
         popHuman = int(config['pop-human'])
 
-        nrinfected = popHuman*config['init-distr-human']
+        #nrinfected = popHuman*config['init-distr-human']
 
         # Generate a list with randomly chosen infected humans based on
         # init-distr-human config value
-        infected = random.sample(xrange(popHuman), int(nrinfected))
+        #infected = random.sample(xrange(popHuman), int(nrinfected))
+        infected = (np.random.rand(popHuman) > config['init-distr-human']).astype(int)
 
         for i in range(0, popHuman-1):
-            if i in infected:
-                status = 1 #Infected
-            else:
-                status = 0 #Not infected
+            status = infected[i]
 
             found = False
 
             # Make sure that every grid place has only one human
             while (not found):
-                coordinates = self.getCoordinates()
-                x = coordinates[0]
-                y = coordinates[1]
+                (x,y) = self.getCoordinates()
 
                 if (grid[x][y].checkFreedom() == True):
                     found = True
@@ -91,24 +87,19 @@ class simulation():
         # Get the numbers of mosquitos in the initial state
         popMosq = int(config['pop-mosq'])
 
-        nrinfected = popMosq*config['init-distr-mosq']
-
-        infected = random.sample(xrange(popMosq), int(nrinfected))
+        #nrinfected = popMosq*config['init-distr-mosq']
+        #infected = random.sample(xrange(popMosq), int(nrinfected))
+        infected = (np.random.rand(popMosq) > config['init-distr-mosq']).astype(int)
 
         for i in range(1, popMosq-1):
-            if i in infected:
-                status = 1 #infected
-            else:
-                status = 0
+            status = infected[i]
 
-            coordinates = self.getCoordinates()
-            x = coordinates[0]
-            y = coordinates[1]
+            (x,y) = self.getCoordinates()
 
             if i%1000 == 0:
                 print i
 
-            grid[x][y].flyIn(m.mosquito(1,2,status))
+            grid[x][y].flyIn(m.mosquito(x,y,status))
 
     def getCoordinates(self):
         x = random.randint(0, self.config['grid-x'] - 1)
