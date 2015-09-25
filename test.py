@@ -1,27 +1,34 @@
+import matplotlib
+matplotlib.use('GTKAgg') 
+import matplotlib.pyplot as plt
 import numpy as np
+import time
 
-# position: x,y. Color: r,g,b
-data = np.zeros(4, dtype = [ ("position", np.float32, 2),
-                                ("color",    np.float32, 3)] )
+x = np.arange(0, 2*np.pi, 0.1)
+y = np.sin(x)
 
-print data
+fig, axes = plt.subplots(nrows=6)
 
+fig.show()
 
-# position shader
-uniform float scale;
-attribute vec2 position;
-attribute vec4 color;
-varying vec4 v_color;
-void main()
-{
-    gl_Position = vec4(position*scale, 0.0, 1.0);
-    v_color = color;
-}
+# We need to draw the canvas before we start animating...
+fig.canvas.draw()
 
-# color fragment
-varying vec4 v_color;
-void main()
-{
-    gl_FragColor = v_color;
-}
+styles = ['r-', 'g-', 'y-', 'm-', 'k-', 'c-']
+def plot(ax, style):
+    return ax.plot(x, y, style, animated=True)[0]
+lines = [plot(ax, style) for ax, style in zip(axes, styles)]
 
+# Let's capture the background of the figure
+backgrounds = [fig.canvas.copy_from_bbox(ax.bbox) for ax in axes]
+
+tstart = time.time()
+for i in xrange(1, 2000):
+    items = enumerate(zip(lines, axes, backgrounds), start=1)
+    for j, (line, ax, background) in items:
+        fig.canvas.restore_region(background)
+        line.set_ydata(np.sin(j*x + i/10.0))
+        ax.draw_artist(line)
+        fig.canvas.blit(ax.bbox)
+
+print 'FPS:' , 2000/(time.time()-tstart)
