@@ -1,7 +1,6 @@
 #!/usr/bin/pythony
 
 import numpy as np
-import gc
 
 class grid:
 
@@ -10,7 +9,6 @@ class grid:
         self.y = y
         self.human = None
         self.mosquito = []
-        gc.disable()
 
     def checkFreedom(self):
         """Check if the human can live here or that there is already an
