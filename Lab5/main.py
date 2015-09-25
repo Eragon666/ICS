@@ -54,11 +54,8 @@ class simulation():
         # Get the numbers of humans in the initial state
         popHuman = int(config['pop-human'])
 
-        #nrinfected = popHuman*config['init-distr-human']
-
         # Generate a list with randomly chosen infected humans based on
         # init-distr-human config value
-        #infected = random.sample(xrange(popHuman), int(nrinfected))
         infected = (np.random.rand(popHuman) > config['init-distr-human']).astype(int)
 
         for i in range(0, popHuman-1):
@@ -88,9 +85,8 @@ class simulation():
         # Get the numbers of mosquitos in the initial state
         popMosq = int(config['pop-mosq'])
 
-        #nrinfected = popMosq*config['init-distr-mosq']
-        #infected = random.sample(xrange(popMosq), int(nrinfected))
         infected = (np.random.rand(popMosq) > config['init-distr-mosq']).astype(int)
+        print infected
 
         for i in range(1, popMosq-1):
             status = infected[i]
