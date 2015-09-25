@@ -96,16 +96,34 @@ class simulation():
                 self.stepMosquitos(x, y)
 
     def stepMosquitos(self, x, y):
-        mosquitos = self.grid[x][y].getMosquitos()
-        self.grid[x][y].clearMosquitos()
+        """ Calculate the step for the mosquitos """
+        #mosquitos = self.grid[x][y].getMosquitos()
+        #self.grid[x][y].clearMosquitos()
+
+        #for mosquito in mosquitos:
+        #    (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
+        #    self.grid[x][y].flyIn(mosquito)
+
+        # Loop through the list of mosquitos and remove the mosquito from the
+        # list if checkMosquito returns False
+        self.grid[x][y].mosquitos[:] = [ z for z in self.grid[x][y].mosquitos
+                if self.checkMosquito(z, (x,y)) ]
 
 
-        #print mosquitos
-        #print self.grid[x][y].getMosquitos()
+    def checkMosquito(self, mosquito, current):
+        """ Check if the mosquitos stays in the same place """
 
-        for mosquito in mosquitos:
-            (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
-            self.grid[x][y].flyIn(mosquito)
+        # Do the calculations for the next position of the mosquito
+        (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
+
+        # If the mosquito did not move, return True
+        if current == (x, y):
+            return True
+
+        # Else place the mosquito in another cell and return False so the
+        # mosquitos gets removed from the current field
+        self.grid[x][y].flyIn(mosquito)
+        return False
 
 
 if __name__ == '__main__':
