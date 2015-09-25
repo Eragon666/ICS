@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import ast
+import gc
 
 import mosquito as m
 import human as h
@@ -28,7 +29,7 @@ class simulation():
         for (x,y), value in np.ndenumerate(self.grid):
             self.grid[x][y] = g.grid(x, y)
 
-        self.addHumans()
+        #self.addHumans()
         self.addMosquitos()
 
         # Twee opties om de grid op te slaan: 
@@ -72,7 +73,7 @@ class simulation():
                 if (grid[x][y].checkFreedom() == True):
                     found = True
 
-            if i%1000 == 0:
+            if i%10000 == 0:
                 print i
 
             grid[x][y].moveIn(h.human(x, y,status))
@@ -96,7 +97,9 @@ class simulation():
 
             (x,y) = self.getCoordinates()
 
-            if i%1000 == 0:
+            c = self.getCoordinates()
+
+            if i%10000 == 0:
                 print i
 
             grid[x][y].flyIn(m.mosquito(x,y,status))
