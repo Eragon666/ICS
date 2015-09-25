@@ -39,3 +39,13 @@ class grid:
         """ Clear the list of mosquitos in this cell """
         self.mosquitos = []
 
+    def getInhabitants(self):
+        """ return inhabitants in current cell """
+
+        if self.human != None:
+            return self.human.getColor()
+        elif not self.mosquitos:
+            return False
+        else:
+            return self.mosquitos[0].getColor()
+

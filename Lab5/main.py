@@ -6,6 +6,7 @@ import time
 import mosquito as m
 import human as h
 import grid as g
+import plot as p
 
 import numpy as np
 import random
@@ -26,6 +27,10 @@ class simulation():
         self.grid = np.ndarray(shape=(config['grid-x'],
             config['grid-y']), dtype=object)
 
+        self.plotX  = []
+        self.plotY  = []
+        self.plotType = []
+
         # Add a grid instance to the array
         for x in xrange(0, config['grid-y']):
             for y in xrange(0, config['grid-x']):
@@ -33,6 +38,7 @@ class simulation():
 
         self.addHumans()
         self.addMosquitos()
+
 
     def addHumans(self):
         """Add humans to the grid, only one human can be on each field"""
@@ -88,12 +94,23 @@ class simulation():
 
     def step(self):
         """ Do all the steps """
+        self.plotX = []
+        self.plotY = []
+        self.plotType = []
 
         self.t += 1
 
-        for x in xrange(0, config['grid-y']):
-            for y in xrange(0, config['grid-x']):
+        for x in xrange(0, config['grid-y'] - 1):
+            for y in xrange(0, config['grid-x'] - 1):
                 self.stepMosquitos(x, y)
+                statusType = self.grid[x][y].getInhabitants()
+
+                if statusType != False:
+                    # set x and y 
+                    #index = y*config['grid-x']+x
+                    self.plotX.append(x)
+                    self.plotY.append(y)
+                    self.plotType.append(statusType)
 
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
@@ -132,6 +149,7 @@ if __name__ == '__main__':
         config = ast.literal_eval(inf.read())
 
     sim = simulation(config)
+    plotter = p.plotter(config)
 
     start = time.time()
     sim.initalizeGrid()
@@ -142,6 +160,7 @@ if __name__ == '__main__':
 
     for i in xrange(10):
         sim.step()
+        plotter.run(sim.plotX,sim.plotY,sim.plotType)
 
     endSteps = time.time()
 

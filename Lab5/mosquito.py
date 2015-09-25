@@ -4,6 +4,9 @@ import numpy as np
 
 class mosquito:
 
+    # 0 = infected = black, 1 = not infected = grey
+    colorList = ['black','grey']
+
     def __init__(self, x, y, t, infected, hungry):
         """ Set the basic parameters for the mosquito """
         self.x = x
@@ -12,6 +15,9 @@ class mosquito:
         self.infected = infected
         self.hungry = hungry
         self.age = np.random.randint(21)
+
+    def getColor(self):
+        return self.colorList[self.infected]
 
     def step(self, maxX, maxY, t):
         """ Move the mosquito to a new place. Return tuple.  """
