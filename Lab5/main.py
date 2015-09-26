@@ -27,9 +27,15 @@ class simulation():
         self.grid = np.ndarray(shape=(config['grid-x'],
             config['grid-y']), dtype=object)
 
+        # create lists for the variables needed in the plot
         self.plotX  = []
         self.plotY  = []
         self.plotType = []
+        self.plotSize = []
+
+        # save a list with the configured colors and sizes for the object types and (infection)states
+        self.sizes = [config['human-size'],config['mosquito-size']]
+        self.stateColors = config['human-state-colors'] + config['mosquito-state-colors']
 
         # Add a grid instance to the array
         for x in xrange(0, config['grid-y']):
@@ -103,14 +109,16 @@ class simulation():
         for x in xrange(0, config['grid-y'] - 1):
             for y in xrange(0, config['grid-x'] - 1):
                 self.stepMosquitos(x, y)
-                statusType = self.grid[x][y].getInhabitants()
+                (inhabitant,status) = self.grid[x][y].getInhabitants()
 
-                if statusType != False:
-                    # set x and y 
-                    #index = y*config['grid-x']+x
+                if status != False:
+                    # calculate the index in the stateColor list. The stateColorList = humanColors + mosquitoColors
+                    # from the config
+                    indexColor = inhabitant*3 + status
                     self.plotX.append(x)
                     self.plotY.append(y)
-                    self.plotType.append(statusType)
+                    self.plotType.append(self.stateColors[indexColor])
+                    self.plotSize.append(self.sizes[inhabitant])
 
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
@@ -160,7 +168,8 @@ if __name__ == '__main__':
 
     for i in xrange(10):
         sim.step()
-        plotter.run(sim.plotX,sim.plotY,sim.plotType)
+        # plot the current step by sending x,y,size and type for each point
+        plotter.run(sim.plotX,sim.plotY,sim.plotSize,sim.plotType)
 
     endSteps = time.time()
 

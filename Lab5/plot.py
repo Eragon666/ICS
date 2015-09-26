@@ -14,12 +14,12 @@ class plotter:
         plt.ion()
         plt.show()
 
-    def run(self, x, y, colors):
+    def run(self, x, y, sizes, colors):
         """
         Display the simulation using matplotlib, optionally using blit for speed
         """
         plt.cla()
         plt.axis([0, self.config['grid-x'], 0, self.config['grid-y']])
-        plt.scatter(x, y, s=10, c=colors)
+        plt.scatter(x, y, s=sizes, c=colors)
         plt.draw()
 

@@ -40,12 +40,12 @@ class grid:
         self.mosquitos = []
 
     def getInhabitants(self):
-        """ return inhabitants in current cell """
+        """ return the type of habitant of a cell, and its status"""
 
         if self.human != None:
-            return self.human.getColor()
+            return (0,self.human.status)
         elif not self.mosquitos:
-            return False
+            return (False,False)
         else:
-            return self.mosquitos[0].getColor()
+            return (1,self.mosquitos[0].infected)
 
