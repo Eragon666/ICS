@@ -1,6 +1,7 @@
 #!/usr/bin/pythony
 
 import numpy as np
+import random
 
 class grid:
 
@@ -30,6 +31,20 @@ class grid:
         """Fly the mosquito into the cell, multiple mosquitos can be in one
         cell"""
         self.mosquitos.append(mosquito)
+        #self.devourHumans(mosquito)
+
+    def devourHumans(self,mosquito):
+        """ eat a human if there is one and the mosquito hungry """
+        if self.human != None and mosquito.hungry == 1:
+            # if the human is infected, so is the mosquito based on probability
+            if self.human.status == 1 and decision(0.9):
+                mosquito.infected = 1
+            # if the human is not immune and mosq is infected, infect human based on probability
+            elif self.human.status != 2 and mosquito.infected == 1 and decision(0.8):
+                self.human.status = 1
+
+    def decision(probability):
+        return random.random() < probability
 
     def getMosquitos(self):
         """ return the list of mosquitos in this cell """
@@ -40,12 +55,12 @@ class grid:
         self.mosquitos = []
 
     def getInhabitants(self):
-        """ return the type of habitant of a cell, and its status"""
+        """ return inhabitants in current cell """
 
         if self.human != None:
-            return (0,self.human.status)
+            return (self.human.getColor(), self.human.size)
         elif not self.mosquitos:
-            return (False,False)
+            return (False, False)
         else:
-            return (1,self.mosquitos[0].infected)
+            return (self.mosquitos[0].getColor(), self.mosquitos[0].size)
 
