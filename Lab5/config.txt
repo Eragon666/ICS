@@ -6,12 +6,12 @@
     'prevalence': 23, # The end-goal or stable prevalence value
     'pop-human': 3000, # Total human population at start
     'pop-mosq': 15000, # Total mosquito population at start
-    'death-rate': '0.007', # Change of dying after infection
-    'death-delay': '15', # average amount of days before malaria is deadly
+    'death-rate': 0.007, # Change of dying after infection
+    'death-delay': 15, # average amount of days before malaria is deadly
     'immunity-change': 0.05, # change someone becomes immune after surviving malaria
     'human-max-age': '', # 1 step is 1 day, thus the simulation will never reach human max age
-    'mosq-max-age': '18', # 1 step 1 day
-    'mosq-eggs': '120', # mosquitos lay between 80-180 eggs per batch
+    'mosq-max-age': 18, # 1 step 1 day
+    'mosq-eggs': 120, # mosquitos lay between 80-180 eggs per batch
     'mosq-days-per-batch': 4, # Mosquitos take on average 4 days to digest blood and make eggs
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
