@@ -12,13 +12,14 @@
     'human-max-age': '', # 1 step is 1 day, thus the simulation will never reach human max age
     'mosq-max-age': 18, # 1 step 1 day
     'mosq-eggs': 150, # mosquitos lay between 80-180 eggs per batch
+    'mosq-eggs-survive': 0.1, # Percentage of eggs who survive
     'mosq-oviposition': 4, # days needed to process blood and make eggs
     'mosq-batches-lifetime': 10, # 9/12 batches per lifetime
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
     'init-distr-human': 0.23, # Initial infected humans
-
     'init-distr-mosq': 0.5, # Initial infected mosquitos
     'init-hungry-mosq': 0.5, # Initial hungry mosquitos
+    'init-ovi': 0.3, # Initial number of pregnant mosquitos
     'steps': 25 # Number of time steps
 }

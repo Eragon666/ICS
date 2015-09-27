@@ -9,7 +9,7 @@ class mosquito:
     # 0 = not infected = grey, 1 = infected = black
     colorList = ['#ECEAE5','black']
 
-    def __init__(self, x, y, t, infected, hungry, age):
+    def __init__(self, x, y, t, infected, hungry, age, ovi=False):
         """ Set the basic parameters for the mosquito """
         self.x = x
         self.y = y
@@ -17,7 +17,11 @@ class mosquito:
         self.infected = infected
         self.hungry = hungry  # 0 not hungry, 1 hungry
         self.age = age
-        self.oviposition = 0
+
+        if (ovi == True):
+            self.oviposition = random.randint(1, 3)
+        else:
+            self.oviposition = 0
 
     def getColor(self):
         return self.colorList[self.infected]

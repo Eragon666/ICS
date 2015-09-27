@@ -126,6 +126,8 @@ class simulation():
         plotSize = []
 
         self.t += 1
+        self.mosq = 0
+        self.stay = 0
 
         # Speed up of the code, use local vars in for loops
         xAppend = plotX.append
@@ -156,9 +158,11 @@ class simulation():
                     typeAppend(status)
                     sizeAppend(objectSize)
 
-        self.prevalence[self.t] = float(infectedNow)/float(self.config['pop-human']) * 100.0
+        self.prevalence[self.t] = float(infectedNow)/float(self.config['pop-human'])
 
         print 'People infected atm: ' + str(infectedNow) + ' so prevalence = ' + str(self.prevalence[self.t])
+
+        print 'Total mosquitos: ' + str(self.mosq) + ' stay: ' + str(self.stay)
 
         self.plotX = plotX
         self.plotY = plotY
@@ -200,6 +204,8 @@ class simulation():
     def checkMosquito(self, mosquito, current):
         """ Check if the mosquitos stays in the same place """
 
+        self.mosq += 1
+
         # check if the mosquito died of age
         if mosquito.checkDeath(self.config['mosq-max-age']):
             return False
@@ -217,6 +223,7 @@ class simulation():
 
         # If the mosquito did not move, keep it in the current grid
         if current == (x, y):
+            self.stay += 1
             return True
 
         # Else place the mosquito in another cell and return False so the
@@ -285,6 +292,8 @@ if __name__ == '__main__':
 
         endSteps2 = time.time()
         print "Step number:",i, " steptime:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
+
+        print ''
 
     print 'People died from Malaria: ' + str(sim.deads) + ', cured = ' + str(sim.cured) + ', immune = ' + str(sim.immune) + ' infected = ' + str(sim.infected)
 
