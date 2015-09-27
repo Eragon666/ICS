@@ -30,6 +30,7 @@ class simulation():
         self.plotX  = []
         self.plotY  = []
         self.plotType = []
+        self.plotSize = []
 
         # Add a grid instance to the array
         for x in xrange(0, config['grid-y']):
@@ -52,6 +53,7 @@ class simulation():
         # Generate a list with randomly chosen infected humans based on
         # init-distr-human config value
         infected = (np.random.rand(popHuman) > config['init-distr-human']).astype(int)
+        print infected
 
         for i in xrange(0, popHuman-1):
             found = False
@@ -63,7 +65,7 @@ class simulation():
                 if (grid[x][y].checkFreedom() == True):
                     found = True
 
-            grid[x][y].moveIn(h.human(x, y, infected[i]))
+            grid[x][y].moveIn(h.human(x, y, infected[i], config['human-size']))
 
     def addMosquitos(self):
         """ Add the mosquitos to the grid, there can be humans and mosquitos on
@@ -83,7 +85,7 @@ class simulation():
         for i in xrange(1, popMosq-1):
             (x,y) = self.getCoordinates()
 
-            grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i]))
+            grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i], config['mosquito-size']))
 
     def getCoordinates(self):
         """ Generate a pair of coordinates, return it as a tuple"""
@@ -97,21 +99,26 @@ class simulation():
         self.plotX = []
         self.plotY = []
         self.plotType = []
+        self.plotSize = []
 
         self.t += 1
 
         for x in xrange(0, config['grid-y'] - 1):
+            start = time.time()
+
             for y in xrange(0, config['grid-x'] - 1):
                 self.stepMosquitos(x, y)
-                statusType = self.grid[x][y].getInhabitants()
+                (status, objectSize) = self.grid[x][y].getInhabitants()
 
-                if statusType != False:
-                    # set x and y 
-                    #index = y*config['grid-x']+x
-                    self.plotX.append(x)
-                    self.plotY.append(y)
-                    self.plotType.append(statusType)
+                # add values to plot lists
+                if status != False:
+                    self.plotX.append(int(x))
+                    self.plotY.append(int(y))
+                    self.plotType.append(status)
+                    self.plotSize.append(objectSize)
 
+
+                    
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
         #mosquitos = self.grid[x][y].getMosquitos()
@@ -130,7 +137,7 @@ class simulation():
     def checkMosquito(self, mosquito, current):
         """ Check if the mosquitos stays in the same place """
 
-        # Do the calculations for the next position of the mosquito
+        # Do the calculations for the next position of the mosquito, and change hungry or not
         (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
 
         # If the mosquito did not move, return True
@@ -159,10 +166,18 @@ if __name__ == '__main__':
     startSteps = time.time()
 
     for i in xrange(100):
+        startSteps = time.time()
         sim.step()
-        plotter.run(sim.plotX,sim.plotY,sim.plotType)
+        endSteps = time.time()
 
-    endSteps = time.time()
+        startSteps2 = time.time()
+        plotter.run(sim.plotX,sim.plotY,sim.plotSize,sim.plotType)
 
-    print (endSteps-startSteps)/100
+        endSteps2 = time.time()
+        print "Step:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
+
+    #print sim.plotSize
+
+    #print (endSteps-startSteps)/10
+
 
