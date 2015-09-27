@@ -45,8 +45,9 @@ class grid:
             self.human.humanStung(mosquito, self.config)
             #print "human stung"
 
-        # no human or not hungry
-        else: 
+        # if not hungry it is pregnant, check if its time to lay eggs
+        elif mosquito.hungry == 0: 
+
             # increment oviposition if it is not yet time to lay eggs
             if mosquito.oviposition != config['mosq-oviposition']:
                 mosquito.oviposition += 1
@@ -60,7 +61,7 @@ class grid:
                 #print "I laid some eggs, now:", len(self.mosquitos)
                 # it has digested the blood and dropped the eggs, now it is hungry
                 mosquito.oviposition = 0
-                self.hungry = 1
+                mosquito.hungry = 1
 
     def getMosquitos(self):
         """ return the list of mosquitos in this cell """

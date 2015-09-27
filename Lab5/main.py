@@ -229,8 +229,6 @@ class simulation():
 
     def findHuman(self, mosquitoX, mosquitoY):
         grid = self.grid
-        newX = mosquitoX
-        newY = mosquitoY
         human = [] # humans on x-1,x+1,y-1,y+1
 
         # check if humans to right or left
