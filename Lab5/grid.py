@@ -57,7 +57,10 @@ class grid:
                 append = self.mosquitos.append
 
                 for x in xrange(0, config['mosq-eggs']):
-                    append(m.mosquito(self.x, self.y, mosquito.t, 0, 1, 0))
+                    # Check if the egg will survive
+                    if decision(config['mosq-eggs-survive']) == True:
+                        append(m.mosquito(self.x, self.y, mosquito.t, 0, 1, 1,
+                            self.config))
                 #print "I laid some eggs, now:", len(self.mosquitos)
                 # it has digested the blood and dropped the eggs, now it is hungry
                 mosquito.oviposition = 0
