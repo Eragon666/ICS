@@ -69,7 +69,7 @@ class human:
         # If the mosquito is infected, check if the human becomes infected
         elif mosquito.infected == 1 and decision(config['prob-mosq-human']):
             self.status = 1
-            print "human infected"
+            #print "human infected"
 
             # Check if it's fatal
             if decision(config['death-rate']):
