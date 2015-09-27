@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import numpy as np
-from globalFunctions import decision
+from globalFunctions import decision, decisionLogarithmic
 
 class mosquito:
 
@@ -24,7 +24,7 @@ class mosquito:
         """ Move the mosquito to a new place. Return tuple.  """
 
         # If mosquito dies return -1, -1
-        if decision(self.age / float(maxAge)):
+        if decisionLogarithmic(self.age / float(maxAge)):
             return (-1, -1)
 
         # If already moved this T, stay in this cell

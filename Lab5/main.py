@@ -142,12 +142,6 @@ class simulation():
 
     def checkMosquito(self, mosquito, current):
         """ Check if the mosquitos stays in the same place """
-        # check if the mosquito dies because of age
-        if self.decision(mosquito.age / float(self.config['mosq-max-age'])):
-            print "Mug dood:" , mosquito.age
-            return False
-
-
         # Do the calculations for the next position of the mosquito
         (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1,
                 self.t, self.config['mosq-max-age'])

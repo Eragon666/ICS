@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from globalFunctions import decision
+from globalFunctions import decision, decisionLogarithmic
 
 class human:
 
@@ -20,7 +20,7 @@ class human:
     def checkLife(self, deathDelay, immunityChange):
         #if the human is infected, check if it dies based on death-rate and
         # how long he has the disease
-        if decision((self.infectedOn / float(deathDelay))):
+        if decisionLogarithmic((self.infectedOn / float(deathDelay))):
 
             # if he the infection was not fatal he becomes better, and possibly immune
             if self.fatalInfection == 0:
