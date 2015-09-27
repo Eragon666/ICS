@@ -15,7 +15,7 @@
     'mosq-batches-lifetime': 10, # 9/12 batches per lifetime
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
-    'init-distr-human': 0.23, # Initial infected humans
-    'init-distr-mosq': 0.5, # Initial infected mosquitos
-    'init-hungry-mosq': 0.5 # Initial hungry mosquitos
+    'init-distr-human': 0.0, # Initial infected humans
+    'init-distr-mosq': 1.0, # Initial infected mosquitos
+    'init-hungry-mosq': 1.0 # Initial hungry mosquitos
 }
