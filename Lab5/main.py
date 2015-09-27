@@ -158,11 +158,11 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(10):
+    for i in xrange(100):
         sim.step()
         plotter.run(sim.plotX,sim.plotY,sim.plotType)
 
     endSteps = time.time()
 
-    print (endSteps-startSteps)/10
+    print (endSteps-startSteps)/100
 
