@@ -38,29 +38,30 @@ class grid:
 
     def devourHumans(self,mosquito):
         """ eat a human if there is one and the is mosquito hungry """
-        #print "Devour human: ", self.human , " Hunger:", mosquito.hungry
+        config = self.config
 
+        # check if there is a human to eat when hungry
         if self.human != None and mosquito.hungry == 1:
-
             # Check the consequences of the bite to the human and the mosquito
             self.human.humanStung(mosquito, self.config)
+            #print "human stung"
 
-            # the mosquito has eaten and isn't hungry anymore
-            mosquito.hungry = 0
+        # no human or not hungry
+        else: 
+            # increment oviposition if it is not yet time to lay eggs
+            if mosquito.oviposition != config['mosq-oviposition']:
+                mosquito.oviposition += 1
 
-            # check if it is going to lay eggs: change of lays per lifetime/ maximum mosquito age
-            # only if it has eaten and isn't hungry
-            if decision(self.config['mosq-batches-lifetime'] / float(self.config['mosq-max-age'])):
-                #print "Mother mosquito age:",mosquito.age
+            # lay the eggs after x days
+            else:
                 append = self.mosquitos.append
 
-                for x in xrange(0, self.config['mosq-eggs']):
-                    append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0, 0))
-                #print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
-
-        # there is no human to eat so the mosquito becomes hungry from moving
-        else: 
-            self.hungry = 1
+                for x in xrange(0, config['mosq-eggs']):
+                    append(m.mosquito(self.x, self.y, mosquito.t, 0, 1, 0))
+                #print "I laid some eggs, now:", len(self.mosquitos)
+                # it has digested the blood and dropped the eggs, now it is hungry
+                mosquito.oviposition = 0
+                self.hungry = 1
 
     def getMosquitos(self):
         """ return the list of mosquitos in this cell """
