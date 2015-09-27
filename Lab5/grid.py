@@ -27,7 +27,7 @@ class grid:
 
     def moveOut(self):
         """Remove the human from the cell"""
-        #print 'Another dead man'
+        print 'Another dead man'
         self.human = None
 
     def flyIn(self, mosquito):

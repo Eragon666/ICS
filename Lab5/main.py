@@ -52,6 +52,8 @@ class simulation():
         #print infected
 
         for i in xrange(0, popHuman-1):
+            found = False
+
             # Make sure that every grid place has only one human
             (x,y) = self.findHomeHuman()
 
@@ -164,6 +166,7 @@ class simulation():
 
     def checkMosquito(self, mosquito, current):
         """ Check if the mosquitos stays in the same place """
+
         # Do the calculations for the next position of the mosquito
         (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1,
                 self.t, self.config['mosq-max-age'])

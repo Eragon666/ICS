@@ -25,7 +25,7 @@ class human:
         # how long he has the disease
         if decisionLogarithmic((self.infectedOn / float(deathDelay))):
 
-            # if  the infection was not fatal he becomes better, and possibly immune
+            # if he the infection was not fatal he becomes better, and possibly immune
             if self.fatalInfection == 0:
                 self.infectedOn = 0
                 self.fatalInfection = 0
@@ -59,7 +59,6 @@ class human:
         # If the mosquito is infected, check if the human becomes infected
         elif mosquito.infected == 1 and decision(config['prob-mosq-human']):
             self.status = 1
-            #print "human infected"
 
             # Check if it's fatal
             if decision(config['death-rate']):

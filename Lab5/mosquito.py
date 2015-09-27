@@ -1,13 +1,12 @@
 #!/usr/bin/python
 
 import numpy as np
-from globalFunctions import decision, decisionLogarithmic
-import math 
+from globalFunctions import decisionLogarithmic
 
 class mosquito:
 
     # 0 = infected = black, 1 = not infected = grey
-    colorList = ['black','#ECEAE5']
+    colorList = ['black','grey']
 
     def __init__(self, x, y, t, infected, hungry, age):
         """ Set the basic parameters for the mosquito """
