@@ -30,9 +30,9 @@ class mosquito:
     def checkDeath(self,maxAge):
         # If mosquito dies False
         if decisionLogarithmic(self.age / float(maxAge)):
-            return False
+            return True
 
-        return True
+        return False
 
     def step(self, maxX, maxY, t):
         """ Move the mosquito to a new place. Return tuple.  """
@@ -49,7 +49,7 @@ class mosquito:
                 self.y = newY
             if 0 <= newX < maxX:
                 self.x = newX
-                
+
         self.t = t
         self.age += 1
 
