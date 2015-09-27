@@ -27,7 +27,6 @@ class grid:
 
     def moveOut(self):
         """Remove the human from the cell"""
-        print 'Another dead man'
         self.human = None
 
     def flyIn(self, mosquito):
@@ -51,15 +50,15 @@ class grid:
             # check if it is going to lay eggs: change of lays per lifetime/ maximum mosquito age
             # only if it has eaten and isn't hungry
             if decision(self.config['mosq-batches-lifetime'] / float(self.config['mosq-max-age'])):
-                #print "Mother mosquito age:",mosquito.age
+                # print "Mother mosquito age:",mosquito.age
                 append = self.mosquitos.append
 
                 for x in xrange(0, self.config['mosq-eggs']):
                     append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0, 0))
-                #print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
+                # print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
 
         # there is no human to eat so the mosquito becomes hungry from moving
-        else: 
+        else:
             self.hungry = 1
 
     def getMosquitos(self):
