@@ -10,10 +10,7 @@ def decisionLogarithmic(probability):
     else:
         return False
 
-    return random.random_sample() < -math.log10(float(1-probability))/1.5
-
 def decision(probability):
     """ Makes a decision based on a probability """
     return random.random_sample() < probability
-
 

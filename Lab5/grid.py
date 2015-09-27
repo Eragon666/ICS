@@ -41,16 +41,9 @@ class grid:
         #print "Devour human: ", self.human , " Hunger:", mosquito.hungry
 
         if self.human != None and mosquito.hungry == 1:
-            # if the human is infected, so is the mosquito based on probability
-            if self.human.status == 1 and decision(self.config['prob-human-mosq']):
-                mosquito.infected = 1
-            # if the human is not immune and mosq is infected, infect human based on probability
-            elif self.human.status != 2 and mosquito.infected == 1 and decision(self.config['prob-mosq-human']):
-                self.human.status = 1
 
-                # check if the infection is fatal
-                if (decision(self.config['death-rate'])):
-                    self.fatalInfection = 1
+            # Check the consequences of the bite to the human and the mosquito
+            self.human.humanStung(mosquito, self.config)
 
             # the mosquito has eaten and isn't hungry anymore
             mosquito.hungry = 0

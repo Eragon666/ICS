@@ -77,9 +77,11 @@ class simulation():
         if human == None or human.status != 1:
             return True
 
-
-        elif not human.checkLife(self.config['death-delay'],
-                self.config['immunity-change']):
+        # Check what happens to the human, if false is returns the human died
+        elif human.checkLife(self.config['death-delay'], 
+                self.config['immunity-change']) == False:
+            # Human died, remove from grid
+            self.grid[x][y].moveOut()
             (freeX,freeY) = self.findHomeHuman()
             self.grid[x][y].moveIn(h.human(x, y, 0))
 
@@ -142,6 +144,10 @@ class simulation():
 
     def checkMosquito(self, mosquito, current):
         """ Check if the mosquitos stays in the same place """
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e6e64b6e52d2c10a23d3d02fac41f748e958fe4
         # Do the calculations for the next position of the mosquito
         (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1,
                 self.t, self.config['mosq-max-age'])
@@ -178,7 +184,7 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(25):
+    for i in xrange(100):
         startSteps = time.time()
         sim.step()
         endSteps = time.time()

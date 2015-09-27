@@ -15,9 +15,12 @@ class human:
         self.fatalInfection = 0
 
     def getColor(self):
+        """ Get the color for the human for the draw step """
         return self.colorList[self.status]
 
     def checkLife(self, deathDelay, immunityChange):
+        """ Check if the human dies because of malaria """
+
         #if the human is infected, check if it dies based on death-rate and
         # how long he has the disease
         if decisionLogarithmic((self.infectedOn / float(deathDelay))):
@@ -35,6 +38,30 @@ class human:
             else:
                 return False
 
-         # if the human is not dead or better,  increase the amount of days it has the sickness
+         # if the human is not dead or cured,  increase the amount of days it has the sickness
         else:
             self.infectedOn += 1
+
+    def humanStung(self, mosquito, config):
+        """ Check what happens to the human and the mosquito if the mosquito 
+            stung the human"""
+
+        # If the human is immune, nothing happens
+        if self.status == 2:
+            return
+
+        # Else if the mosquito is not infected, but the human is. Check if the 
+        # human must become infected
+        elif mosquito.infected == 0 and self.status == 1 and decision(config['prob-mosq-human']):
+            mosquito.infected = 1
+            return
+
+        # If the mosquito is infected, check if the human becomes infected
+        elif mosquito.infected == 1 and decision(config['prob-mosq-human']):
+            self.status = 1
+
+            # Check if it's fatal
+            if decision(config['death-rate']):
+                self.fatalInfection = 1
+
+            return
