@@ -48,6 +48,8 @@ class mosquito:
             if self.age > 5 and decisionLogarithmic(self.config['mosq-egg-time']/self.age) == True:
                 self.age = 1
                 self.egg = False
+            else:
+                self.age += 1
 
             return (self.x, self.y)
         else: 
