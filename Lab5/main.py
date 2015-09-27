@@ -95,28 +95,42 @@ class simulation():
 
     def step(self):
         """ Do all the steps """
-        self.plotX = []
-        self.plotY = []
-        self.plotType = []
-        self.plotSize = []
+        plotX = []
+        plotY = []
+        plotType = []
+        plotSize = []
 
         self.t += 1
+
+        # Speed up of the code, use local vars in for loops
+        xAppend = plotX.append
+        yAppend = plotY.append
+        typeAppend = plotType.append
+        sizeAppend = plotSize.append
+        step = self.stepMosquitos
+        cycle = self.cycleOfLife
+        grid = self.grid
 
         for x in xrange(0, config['grid-y'] - 1):
             start = time.time()
 
             for y in xrange(0, config['grid-x'] - 1):
                 # Mosquitos take a step, and check for human deaths
-                self.stepMosquitos(x, y)
-                self.cycleOfLife(x,y)
-                (status, objectSize) = self.grid[x][y].getInhabitants()
+                step(x, y)
+                cycle(x,y)
+                (status, objectSize) = grid[x][y].getInhabitants()
 
                 # add values to plot lists
                 if status != False:
-                    self.plotX.append(int(x))
-                    self.plotY.append(int(y))
-                    self.plotType.append(status)
-                    self.plotSize.append(objectSize)
+                    xAppend(int(x))
+                    yAppend(int(y))
+                    typeAppend(status)
+                    sizeAppend(objectSize)
+
+        self.plotX = plotX
+        self.plotY = plotY
+        self.plotType = plotType
+        self.plotSize = plotSize
 
     def addMosquitos(self):
         """ Add the mosquitos to the grid, there can be humans and mosquitos on
@@ -130,16 +144,24 @@ class simulation():
         infected = (np.random.rand(popMosq) < self.config['init-distr-mosq']).astype(int)
         hungry = (np.random.rand(popMosq) < self.config['init-hungry-mosq']).astype(int)
 
+        t = self.t
+        randint = np.random.randint
+        maxAge = self.config['mosq-max-age']
+
         for i in xrange(1, popMosq-1):
             (x,y) = self.getCoordinates()
-            self.grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i], np.random.randint(self.config['mosq-max-age'])))
+            self.grid[x][y].flyIn(m.mosquito(x, y, t, infected[i], hungry[i],
+                randint(maxAge)))
 
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
         # Loop through the list of mosquitos and remove the mosquito from the
         # list if checkMosquito returns False
-        self.grid[x][y].mosquitos[:] = [ z for z in self.grid[x][y].mosquitos
-                if self.checkMosquito(z, (x,y)) ]
+        grid = self.grid
+        check = self.checkMosquito
+
+        grid[x][y].mosquitos[:] = [ z for z in grid[x][y].mosquitos
+                if check(z, (x,y)) ]
 
 
     def checkMosquito(self, mosquito, current):

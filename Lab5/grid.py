@@ -52,8 +52,10 @@ class grid:
             # only if it has eaten and isn't hungry
             if decision(self.config['mosq-batches-lifetime'] / float(self.config['mosq-max-age'])):
                 #print "Mother mosquito age:",mosquito.age
+                append = self.mosquitos.append
+
                 for x in xrange(0, self.config['mosq-eggs']):
-                    self.mosquitos.append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0, 0))
+                    append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0, 0))
                 #print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
 
         # there is no human to eat so the mosquito becomes hungry from moving
