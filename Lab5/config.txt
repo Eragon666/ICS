@@ -17,6 +17,8 @@
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
     'init-distr-human': 0.23, # Initial infected humans
-    'init-distr-mosq': 1.0, # Initial infected mosquitos
-    'init-hungry-mosq': 0.5 # Initial hungry mosquitos
+
+    'init-distr-mosq': 0.5, # Initial infected mosquitos
+    'init-hungry-mosq': 0.5, # Initial hungry mosquitos
+    'steps': 25 # Number of time steps
 }

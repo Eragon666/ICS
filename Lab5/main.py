@@ -17,6 +17,31 @@ class simulation():
         """ Initialize the class and save the config """
         self.config = config
         self.t = 0
+        self.deads = [0] * (config['steps'] + 1)
+        self.infected = [0] * (config['steps'] + 1)
+        self.immune = [0] * (config['steps'] + 1)
+        self.cured = [0] * (config['steps'] + 1)
+        self.prevalence = [0] * (config['steps'] + 1)
+
+    def motherStats(self, resp):
+        """ Callback function for childs to return their status and gather
+        statistics """
+
+        # a person is infected
+        if resp == 1:
+            self.infected[self.t] += 1
+
+        # a person is now immune
+        elif resp == 2:
+            self.immune[self.t] += 1
+
+        # a person is cured
+        elif resp == 3:
+            self.cured[self.t] += 1
+
+        # a person died
+        elif resp == 4:
+            self.deads[self.t] += 1
 
     def initalizeGrid(self):
         """ Initialize the grid and the human and mosquito classes """
@@ -57,7 +82,7 @@ class simulation():
             # Make sure that every grid place has only one human
             (x,y) = self.findHomeHuman()
 
-            self.grid[x][y].moveIn(h.human(x, y, infected[i]))
+            self.grid[x][y].moveIn(h.human(x, y, infected[i], self.motherStats))
 
     def findHomeHuman(self):
         """ Find a free cell for a human """
@@ -83,7 +108,7 @@ class simulation():
             # Human died, remove from grid
             self.grid[x][y].moveOut()
             (freeX,freeY) = self.findHomeHuman()
-            self.grid[x][y].moveIn(h.human(x, y, 0))
+            self.grid[x][y].moveIn(h.human(x, y, 0, self.motherStats))
 
     def getCoordinates(self):
         """ Generate a pair of coordinates, return it as a tuple"""
@@ -111,6 +136,8 @@ class simulation():
         cycle = self.cycleOfLife
         grid = self.grid
 
+        infectedNow = 0
+
         for x in xrange(0, config['grid-y'] - 1):
             start = time.time()
 
@@ -122,10 +149,16 @@ class simulation():
 
                 # add values to plot lists
                 if status != False:
+                    if status == 'red':
+                        infectedNow += 1
                     xAppend(int(x))
                     yAppend(int(y))
                     typeAppend(status)
                     sizeAppend(objectSize)
+
+        self.prevalence[self.t] = float(infectedNow)/float(self.config['pop-human']) * 100.0
+
+        print 'People infected atm: ' + str(infectedNow) + ' so prevalence = ' + str(self.prevalence[self.t])
 
         self.plotX = plotX
         self.plotY = plotY
@@ -241,16 +274,21 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(100):
+    for i in xrange(config['steps']):
         startSteps = time.time()
         sim.step()
         endSteps = time.time()
 
         startSteps2 = time.time()
+
+        # Do not plot all the steps
+        #if (i % 5 == 0):
         plotter.run(sim.plotX,sim.plotY,sim.plotSize,sim.plotType)
 
         endSteps2 = time.time()
         print "Step number:",i, " steptime:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
+
+    print 'People died from Malaria: ' + str(sim.deads) + ', cured = ' + str(sim.cured) + ', immune = ' + str(sim.immune)
 
     #print sim.plotSize
 
