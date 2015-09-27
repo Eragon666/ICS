@@ -11,7 +11,6 @@ import plot as p
 import numpy as np
 import random
 
-
 class simulation():
 
     def __init__(self, config):
@@ -79,31 +78,10 @@ class simulation():
             return True
 
 
-        # if the human is infected, check if it dies based on death-rate and 
-        # how long he has the disease
-        if self.decision(human.infectedOn / float(self.config['death-delay'])):
-
-            # if he the infection was not fatal he becomes better, and possibly immune
-            if human.fatalInfection == 0:
-                human.infectedOn = 0
-                human.fatalInfection = 0
-                human.status = 0
-
-                if self.decision(self.config['immunity-change']):
-                    human.status = 2
-
-            # if the infection was fatal the human dies and a new baby is born
-            else:
-                human = None
-
-                # find a free cell, create a human and place it
-                (freeX,freeY) = self.findHomeHuman()
-                self.grid[x][y].moveIn(h.human(x, y, 0))
-
-        # if the human is not dead or better,  increase the amount of days it has the sickness
-        else: 
-            human.infectedOn += 1
-
+        elif not human.checkLife(self.config['death-delay'],
+                self.config['immunity-change']):
+            (freeX,freeY) = self.findHomeHuman()
+            self.grid[x][y].moveIn(h.human(x, y, 0))
 
     def getCoordinates(self):
         """ Generate a pair of coordinates, return it as a tuple"""
@@ -112,9 +90,6 @@ class simulation():
 
         return (x, y)
 
-    def decision(self,probability):
-        """ Makes a decision based on a probability """
-        return np.random.random_sample() < probability
 
     def step(self):
         """ Do all the steps """
@@ -156,7 +131,7 @@ class simulation():
         for i in xrange(1, popMosq-1):
             (x,y) = self.getCoordinates()
             self.grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i], np.random.randint(self.config['mosq-max-age'])))
-                    
+
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
         # Loop through the list of mosquitos and remove the mosquito from the
@@ -172,18 +147,25 @@ class simulation():
             print "Mug dood:" , mosquito.age
             return False
 
+
         # Do the calculations for the next position of the mosquito
-        (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
+        (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1,
+                self.t, self.config['mosq-max-age'])
+
+        # If x is -1, the mosquito died
+        if x == -1:
+            return False
 
         # If the mosquito did not move, return True
-        if current == (x, y):
+        elif current == (x, y):
             return True
 
         # Else place the mosquito in another cell and return False so the
         # mosquitos gets removed from the current field
-        # The mosquito also eats a human if there is one in its new cell
-        self.grid[x][y].flyIn(mosquito)
-        return False
+        # The mosquito also eats blood of a human if there is one in its new cell
+        else:
+            self.grid[x][y].flyIn(mosquito)
+            return False
 
 
 
@@ -202,7 +184,7 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(100):
+    for i in xrange(25):
         startSteps = time.time()
         sim.step()
         endSteps = time.time()
@@ -215,5 +197,6 @@ if __name__ == '__main__':
 
     #print sim.plotSize
 
-    #print (endSteps-startSteps)/10
+    #print (endSteps-startSteps)/25
+
 

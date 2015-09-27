@@ -1,6 +1,7 @@
 #!/usr/bin/pythony
 
 import numpy as np
+from globalFunctions import decision
 import mosquito as m
 
 class grid:
@@ -26,6 +27,7 @@ class grid:
 
     def moveOut(self):
         """Remove the human from the cell"""
+        print 'Another dead man'
         self.human = None
 
     def flyIn(self, mosquito):
@@ -40,14 +42,14 @@ class grid:
 
         if self.human != None and mosquito.hungry == 1:
             # if the human is infected, so is the mosquito based on probability
-            if self.human.status == 1 and self.decision(self.config['prob-human-mosq']):
+            if self.human.status == 1 and decision(self.config['prob-human-mosq']):
                 mosquito.infected = 1
             # if the human is not immune and mosq is infected, infect human based on probability
-            elif self.human.status != 2 and mosquito.infected == 1 and self.decision(self.config['prob-mosq-human']):
+            elif self.human.status != 2 and mosquito.infected == 1 and decision(self.config['prob-mosq-human']):
                 self.human.status = 1
 
                 # check if the infection is fatal
-                if (self.decision(self.config['death-rate'])):
+                if (decision(self.config['death-rate'])):
                     self.fatalInfection = 1
 
             # the mosquito has eaten and isn't hungry anymore
@@ -64,10 +66,6 @@ class grid:
         # there is no human to eat so the mosquito becomes hungry from moving
         else: 
             self.hungry = 1
-
-    def decision(self,probability):
-        """ Makes a decision based on a probability """
-        return np.random.random_sample() < probability
 
     def getMosquitos(self):
         """ return the list of mosquitos in this cell """
