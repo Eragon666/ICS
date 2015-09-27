@@ -77,9 +77,11 @@ class simulation():
         if human == None or human.status != 1:
             return True
 
-
-        elif not human.checkLife(self.config['death-delay'],
-                self.config['immunity-change']):
+        # Check what happens to the human, if false is returns the human died
+        elif human.checkLife(self.config['death-delay'], 
+                self.config['immunity-change']) == False:
+            # Human died, remove from grid
+            self.grid[x][y].moveOut()
             (freeX,freeY) = self.findHomeHuman()
             self.grid[x][y].moveIn(h.human(x, y, 0))
 
@@ -180,7 +182,7 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(25):
+    for i in xrange(100):
         startSteps = time.time()
         sim.step()
         endSteps = time.time()

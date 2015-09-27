@@ -33,6 +33,7 @@ class human:
 
              # if the infection was fatal the human dies and a new baby is born
             else:
+                print "Human must die!"
                 return False
 
          # if the human is not dead or better,  increase the amount of days it has the sickness
