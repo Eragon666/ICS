@@ -11,17 +11,17 @@
     'immunity-change': 0.05, # change someone becomes immune after surviving malaria
     'human-max-age': '', # 1 step is 1 day, thus the simulation will never reach human max age
     'mosq-max-age': 18, # 1 step 1 day
-    'mosq-eggs': 150, # mosquitos lay between 80-180 eggs per batch
-    'mosq-eggs-survive': 0.04, # Percentage of eggs who survive
+    'mosq-eggs': 120, # mosquitos lay between 80-180 eggs per batch
+    'mosq-eggs-survive': 0.03, # Percentage of eggs who survive
     'mosq-egg-time': 14, # Time before an egg becomes an mosquito
     'mosq-oviposition': 4, # days needed to process blood and make eggs
     'mosq-batches-lifetime': 10, # 9/12 batches per lifetime
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
     'init-distr-human': 0.23, # Initial infected humans
-    'init-distr-mosq': 0.5, # Initial infected mosquitos
-    'init-hungry-mosq': 0.5, # Initial hungry mosquitos
-    'init-ovi': 0.3, # Initial number of pregnant mosquitos
-    'init-egg': 0.3, # Initial number of mosquitos as egg
+    'init-distr-mosq': 0.1, # Initial infected mosquitos
+    'init-hungry-mosq': 0.3, # Initial hungry mosquitos
+    'init-ovi': 0.1, # Initial number of pregnant mosquitos
+    'init-egg': 0.2, # Initial number of mosquitos as egg
     'steps': 250 # Number of time steps
 }
