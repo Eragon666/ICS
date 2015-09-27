@@ -104,8 +104,7 @@ class simulation():
             return True
 
         # Check what happens to the human, if false is returns the human died
-        elif human.checkLife(self.config['death-delay'], 
-                self.config['immunity-change']) == False:
+        elif human.checkLife() == False:
             # Human died, remove from grid
             self.grid[x][y].moveOut()
             (freeX,freeY) = self.findHomeHuman()
@@ -266,11 +265,9 @@ class simulation():
         # if no humans found, return false and do a random move
         if len(human) == 0:
             return (False,False)
-        elif len(human) == 1:
-            return human[0]
         else:
             # if we found a human in the neighbourhoud, go to it
-            return human[np.random.randint(len(human)-1)]
+            return human[np.random.randint(len(human))]
 
 
 

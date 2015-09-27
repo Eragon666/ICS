@@ -21,7 +21,7 @@ class human:
         """ Get the color for the human for the draw step """
         return self.colorList[self.status]
 
-    def checkLife(self, deathDelay, immunityChange):
+    def checkLife(self):
         """ Check if the human dies because of malaria """
 
         # If the infection is deadly, check if it's time to die already
@@ -54,7 +54,7 @@ class human:
     def checkImmune(self):
         """ Check if the human becomes immune after malaria infection """
 
-        if decision(float(self.config['immunity-change'])):
+        if decision(float(self.config['immunity-chance'])):
             self.status = 2
             self.mother(2)
 
