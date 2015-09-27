@@ -78,7 +78,7 @@ class simulation():
             return True
 
 
-        if not human.checkLife(self.config['death-delay'],
+        elif not human.checkLife(self.config['death-delay'],
                 self.config['immunity-change']):
             (freeX,freeY) = self.findHomeHuman()
             self.grid[x][y].moveIn(h.human(x, y, 0))
@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(100):
+    for i in xrange(25):
         startSteps = time.time()
         sim.step()
         endSteps = time.time()
@@ -193,6 +193,6 @@ if __name__ == '__main__':
 
     #print sim.plotSize
 
-    #print (endSteps-startSteps)/10
+    #print (endSteps-startSteps)/25
 
 

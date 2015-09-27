@@ -23,20 +23,17 @@ class human:
         if decision((self.infectedOn / float(deathDelay))):
 
             # if he the infection was not fatal he becomes better, and possibly immune
-            if human.fatalInfection == 0:
-                human.infectedOn = 0
-                human.fatalInfection = 0
-                human.status = 0
+            if self.fatalInfection == 0:
+                self.infectedOn = 0
+                self.fatalInfection = 0
+                self.status = 0
 
                 if decision(float(immunityChange)):
-                     human.status = 2
+                     self.status = 2
 
              # if the infection was fatal the human dies and a new baby is born
             else:
-                human = None
-                # find a free cell, create a human and place it
-                (freeX,freeY) = self.findHomeHuman()
-                self.grid[x][y].moveIn(h.human(x, y, 0))
+                return False
 
          # if the human is not dead or better,  increase the amount of days it has the sickness
         else:

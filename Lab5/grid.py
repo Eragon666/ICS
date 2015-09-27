@@ -27,6 +27,7 @@ class grid:
 
     def moveOut(self):
         """Remove the human from the cell"""
+        print 'Another dead man'
         self.human = None
 
     def flyIn(self, mosquito):
@@ -59,7 +60,7 @@ class grid:
                 #print "Mother mosquito age:",mosquito.age
                 for x in xrange(0, self.config['mosq-eggs']):
                     self.mosquitos.append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0))
-                print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
+                #print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
 
         # there is no human to eat so the mosquito becomes hungry from moving
         else: 
