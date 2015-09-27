@@ -22,7 +22,7 @@ class human:
     def checkLife(self, deathDelay, immunityChange):
         """ Check if the human dies because of malaria """
 
-        #if the human is infected, check if it dies based on death-rate and
+        # if the human is infected, check if it dies based on death-rate and
         # how long he has the disease
         if decisionLogarithmic((self.infectedOn / float(deathDelay))):
 
@@ -51,6 +51,10 @@ class human:
     def humanStung(self, mosquito, config):
         """ Check what happens to the human and the mosquito if the mosquito 
             stung the human"""
+        # the mosquito has eaten and isn't hungry anymore,
+        # it's also immediatly making eggs
+        mosquito.hungry = 0
+        mosquito.oviposition += 1
 
         # If the human is immune, nothing happens
         if self.status == 2:
@@ -65,6 +69,7 @@ class human:
         # If the mosquito is infected, check if the human becomes infected
         elif mosquito.infected == 1 and decision(config['prob-mosq-human']):
             self.status = 1
+            print "human infected"
 
             # Check if it's fatal
             if decision(config['death-rate']):

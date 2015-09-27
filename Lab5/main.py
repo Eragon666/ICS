@@ -174,7 +174,7 @@ class simulation():
 
         # Generate for each mosquito if it's infected or not and if it's hungry 
         # in the initial state. Based on the initial distribution.
-        infected = (np.random.rand(popMosq) < self.config['init-distr-mosq']).astype(int)
+        infected = (np.random.rand(popMosq) < self.config['init-distr-mosq']).astype(int) 
         hungry = (np.random.rand(popMosq) < self.config['init-hungry-mosq']).astype(int)
 
         t = self.t
@@ -200,16 +200,23 @@ class simulation():
     def checkMosquito(self, mosquito, current):
         """ Check if the mosquitos stays in the same place """
 
-        # Do the calculations for the next position of the mosquito
-        (x, y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1,
-                self.t, self.config['mosq-max-age'])
-
-        # If x is -1, the mosquito died
-        if x == -1:
+        # check if the mosquito died of age
+        if mosquito.checkDeath(self.config['mosq-max-age']):
             return False
 
-        # If the mosquito did not move, return True
-        elif current == (x, y):
+        x = False
+        y = False
+
+        # find a human when hungry
+        if mosquito.hungry == 1:
+            (x,y) = self.findHuman(mosquito.x,mosquito.y)
+        elif x == False and y == False:
+            # Do the calculations for the next position of the mosquito
+            (x,y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
+
+
+        # If the mosquito did not move, keep it in the current grid
+        if current == (x, y):
             return True
 
         # Else place the mosquito in another cell and return False so the
@@ -218,6 +225,37 @@ class simulation():
         else:
             self.grid[x][y].flyIn(mosquito)
             return False
+
+
+    def findHuman(self, mosquitoX, mosquitoY):
+        grid = self.grid
+        newX = mosquitoX
+        newY = mosquitoY
+        human = [] # humans on x-1,x+1,y-1,y+1
+
+        # check if humans to right or left
+        if 1 < mosquitoX < self.config['grid-x']-2:
+            if grid[mosquitoX-1][mosquitoY].human != None:
+                human.append((mosquitoX-1,mosquitoY))
+        
+            if grid[mosquitoX+1][mosquitoY].human != None:
+                human.append((mosquitoX+1,mosquitoY))
+
+        # check if humans on top or bottom
+        if 1 < mosquitoY < self.config['grid-y']-2:
+            if grid[mosquitoX][mosquitoY-1].human != None:
+                human.append((mosquitoX,mosquitoY-1))
+            elif grid[mosquitoX][mosquitoY+1].human != None:
+                human.append((mosquitoX,mosquitoY+1))
+
+        # if no humans found, return false and do a random move
+        if len(human) == 0:
+            return (False,False)
+        elif len(human) == 1:
+            return human[0]
+        else:
+            # if we found a human in the neighbourhoud, go to it
+            return human[np.random.randint(len(human)-1)]
 
 
 
