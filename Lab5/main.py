@@ -189,7 +189,7 @@ if __name__ == '__main__':
         plotter.run(sim.plotX,sim.plotY,sim.plotSize,sim.plotType)
 
         endSteps2 = time.time()
-        print "Step:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
+        print "Step number:",i, " steptime:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
 
     #print sim.plotSize
 

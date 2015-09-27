@@ -2,6 +2,7 @@
 
 import numpy as np
 from globalFunctions import decision
+import mosquito as m
 
 class grid:
 
@@ -54,14 +55,15 @@ class grid:
             mosquito.hungry = 0
 
             # check if it is ready to lay eggs
-            #if ovipositionCountdown >= self.config['mosq-days-per-batch']:
-            #    for x in xrange(0,self.conf['mosq-eggs']):
-            #        self.mosquitos.append(m.mosquito(x, y, self.t, mosquito.infected, 0))
-
+            if mosquito.ovipositionCountdown >= self.config['mosq-days-per-batch']:
+                #print "Mother mosquito age:",mosquito.age
+                for x in xrange(0, self.config['mosq-eggs']):
+                    self.mosquitos.append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0))
+                print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
 
         # there is no human to eat so the mosquito becomes hungry from moving
         else: 
-            #self.ovipositionCountdown += 1
+            mosquito.ovipositionCountdown += 1
             self.hungry = 1
 
     def getMosquitos(self):
