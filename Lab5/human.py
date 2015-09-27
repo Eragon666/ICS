@@ -7,13 +7,15 @@ class human:
     # 0 = normaal = groen, 1 = infected = rood, 2 = immuun = blauw 
     colorList = ['green','red','blue']
 
-    def __init__(self, x, y, status, mother):
+    def __init__(self, x, y, status, mother, config, medicine=False):
         self.x = x
         self.y = y
         self.status = status
         self.infectedOn = 0
         self.fatalInfection = 0
+        self.medicine = medicine
         self.mother = mother
+        self.config = config
 
     def getColor(self):
         """ Get the color for the human for the draw step """
@@ -22,31 +24,39 @@ class human:
     def checkLife(self, deathDelay, immunityChange):
         """ Check if the human dies because of malaria """
 
-        # if the human is infected, check if it dies based on death-rate and
-        # how long he has the disease
-        if decisionLogarithmic((self.infectedOn / float(deathDelay))):
+        # If the infection is deadly, check if it's time to die already
+        if self.fatalInfection == True and decisionLogarithmic((self.infectedOn/
+                float(self.config['death-delay']))):
+            self.mother(4)
+            return True
 
-            # if he the infection was not fatal he becomes better, and possibly immune
-            if self.fatalInfection == 0:
-                self.infectedOn = 0
-                self.fatalInfection = 0
-                self.status = 0
+        # If access to good medicine, cure is short. Check if cured already
+        elif self.medicine == True and decisionLogarithmic((self.infectedOn /
+                float(self.config['cure-medicine']))):
+            self.infectedOn = 0
+            self.status = 0
+            self.mother(3)
+            self.checkImmune()
 
-                # If cured add to the stats
-                self.mother(3)
+        # If no access to good medicine, check if cured
+        elif decisionLogarithmic((self.infectedOn/float(self.config['cure']))):
+            self.infectedOn = 0
+            self.status = 0
+            self.mother(3)
+            self.checkImmune()
 
-                if decision(float(immunityChange)):
-                     self.status = 2
-                     self.mother(2)
-
-             # if the infection was fatal the human dies and a new baby is born
-            else:
-                self.mother(4)
-                return False
-
-         # if the human is not dead or cured,  increase the amount of days it has the sickness
+        # Increase the time already infected
         else:
             self.infectedOn += 1
+
+
+
+    def checkImmune(self):
+        """ Check if the human becomes immune after malaria infection """
+
+        if decision(float(self.config['immunity-change'])):
+            self.status = 2
+            self.mother(2)
 
     def humanStung(self, mosquito, config):
         """ Check what happens to the human and the mosquito if the mosquito 
@@ -71,8 +81,8 @@ class human:
             self.status = 1
             #print "human infected"
 
-            # Check if it's fatal
-            if decision(config['death-rate']):
+            # Check if it's fatal and no access to good medicine
+            if self.medicine ==  False and decision(config['death-rate']):
                 self.fatalInfection = 1
                 self.mother(1)
 

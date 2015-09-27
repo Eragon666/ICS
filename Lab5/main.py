@@ -74,7 +74,7 @@ class simulation():
         # Generate a list with randomly chosen infected humans based on
         # init-distr-human config value
         infected = (np.random.rand(popHuman) < self.config['init-distr-human']).astype(int)
-        #print infected
+        medicine = (np.random.rand(popHuman) < self.config['good-medicine']).astype(int)
 
         for i in xrange(0, popHuman-1):
             found = False
@@ -82,7 +82,8 @@ class simulation():
             # Make sure that every grid place has only one human
             (x,y) = self.findHomeHuman()
 
-            self.grid[x][y].moveIn(h.human(x, y, infected[i], self.motherStats))
+            self.grid[x][y].moveIn(h.human(x, y, infected[i], self.motherStats,
+                self.config, medicine=medicine[i]))
 
     def findHomeHuman(self):
         """ Find a free cell for a human """
@@ -108,7 +109,15 @@ class simulation():
             # Human died, remove from grid
             self.grid[x][y].moveOut()
             (freeX,freeY) = self.findHomeHuman()
-            self.grid[x][y].moveIn(h.human(x, y, 0, self.motherStats))
+
+            # Check if this person have access to good medicine for malaria
+            if random.random() < self.config['good-medicine']:
+                medicine = True
+            else:
+                medicine = False
+
+            self.grid[x][y].moveIn(h.human(x, y, 0, self.motherStats,
+                self.config, medicine))
 
     def getCoordinates(self):
         """ Generate a pair of coordinates, return it as a tuple"""
@@ -158,7 +167,7 @@ class simulation():
                     typeAppend(status)
                     sizeAppend(objectSize)
 
-        self.prevalence[self.t] = float(infectedNow)/float(self.config['pop-human'])
+        self.prevalence[self.t] = float(infectedNow)/float(self.config['pop-human']) * 100
 
         print 'People infected atm: ' + str(infectedNow) + ' so prevalence = ' + str(self.prevalence[self.t])
 

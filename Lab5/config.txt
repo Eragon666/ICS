@@ -4,18 +4,20 @@
     'human-size': 26, # size of circle of human
     'mosquito-size': 3, # size of circle of mosquito
     'prevalence': 23, # The end-goal or stable prevalence value
-    'pop-human': 10000, # Total human population at start
+    'pop-human': 5000, # Total human population at start
     'pop-mosq': 50000, # Total mosquito population at start
     'death-rate': 0.007, # Change of dying after infection
     'death-delay': 15, # average amount of days before malaria is deadly
+    'cure-medicine': 14, # average time to cure with good medicine
+    'cure': 1000, # time to cure  if no medicine 
+    'good-medicine': 0.85, # percentage of people with access to medication
     'immunity-change': 0.05, # change someone becomes immune after surviving malaria
     'human-max-age': '', # 1 step is 1 day, thus the simulation will never reach human max age
     'mosq-max-age': 18, # 1 step 1 day
     'mosq-eggs': 120, # mosquitos lay between 80-180 eggs per batch
     'mosq-eggs-survive': 0.03, # Percentage of eggs who survive
-    'mosq-egg-time': 14, # Time before an egg becomes an mosquito
+    'mosq-egg-time': 21, # Time before an egg becomes an mosquito
     'mosq-oviposition': 4, # days needed to process blood and make eggs
-    'mosq-batches-lifetime': 10, # 9/12 batches per lifetime
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
     'init-distr-human': 0.23, # Initial infected humans
@@ -23,5 +25,5 @@
     'init-hungry-mosq': 0.3, # Initial hungry mosquitos
     'init-ovi': 0.1, # Initial number of pregnant mosquitos
     'init-egg': 0.2, # Initial number of mosquitos as egg
-    'steps': 250 # Number of time steps
+    'steps': 80 # Number of time steps
 }
