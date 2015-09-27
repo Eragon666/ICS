@@ -17,10 +17,11 @@ class simulation():
         """ Initialize the class and save the config """
         self.config = config
         self.t = 0
-        self.deads = 0
-        self.infected = 0
-        self.imume = 0
-        self.cured = 0
+        self.deads = [0] * (config['steps'] + 1)
+        self.infected = [0] * (config['steps'] + 1)
+        self.immune = [0] * (config['steps'] + 1)
+        self.cured = [0] * (config['steps'] + 1)
+        self.prevalence = [0] * (config['steps'] + 1)
 
     def motherStats(self, resp):
         """ Callback function for childs to return their status and gather
@@ -28,19 +29,19 @@ class simulation():
 
         # a person is infected
         if resp == 1:
-            self.infected += 1
+            self.infected[self.t] += 1
 
-        # a person is now imume
+        # a person is now immune
         elif resp == 2:
-            self.imume += 1
+            self.immune[self.t] += 1
 
         # a person is cured
         elif resp == 3:
-            self.cured += 1
+            self.cured[self.t] += 1
 
         # a person died
         elif resp == 4:
-            self.deads += 1
+            self.deads[self.t] += 1
 
     def initalizeGrid(self):
         """ Initialize the grid and the human and mosquito classes """
@@ -155,9 +156,9 @@ class simulation():
                     typeAppend(status)
                     sizeAppend(objectSize)
 
-        prevalence = float(infectedNow)/float(self.config['pop-human']) * 100.0
+        self.prevalence[self.t] = float(infectedNow)/float(self.config['pop-human']) * 100.0
 
-        print 'People infected atm: ' + str(infectedNow) + ' so prevalence = ' + str(prevalence)
+        print 'People infected atm: ' + str(infectedNow) + ' so prevalence = ' + str(self.prevalence[self.t])
 
         self.plotX = plotX
         self.plotY = plotY
@@ -235,7 +236,7 @@ if __name__ == '__main__':
 
     startSteps = time.time()
 
-    for i in xrange(20):
+    for i in xrange(config['steps']):
         startSteps = time.time()
         sim.step()
         endSteps = time.time()
@@ -249,7 +250,7 @@ if __name__ == '__main__':
         endSteps2 = time.time()
         print "Step number:",i, " steptime:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
 
-    print 'People died from Malaria: ' + str(sim.deads) + ', cured = ' + str(sim.cured) + ', imume = ' + str(sim.imume)
+    print 'People died from Malaria: ' + str(sim.deads) + ', cured = ' + str(sim.cured) + ', immune = ' + str(sim.immune)
 
     #print sim.plotSize
 
