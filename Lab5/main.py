@@ -214,7 +214,6 @@ class simulation():
             # Do the calculations for the next position of the mosquito
             (x,y) = mosquito.step(config['grid-x'] - 1, config['grid-y'] - 1, self.t)
 
-
         # If the mosquito did not move, keep it in the current grid
         if current == (x, y):
             return True
