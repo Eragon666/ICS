@@ -155,8 +155,7 @@ class simulation():
 
         for i in xrange(1, popMosq-1):
             (x,y) = self.getCoordinates()
-
-            self.grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i]))
+            self.grid[x][y].flyIn(m.mosquito(x, y, self.t, infected[i], hungry[i], np.random.randint(self.config['mosq-max-age'])))
                     
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
@@ -170,6 +169,7 @@ class simulation():
         """ Check if the mosquitos stays in the same place """
         # check if the mosquito dies because of age
         if self.decision(mosquito.age / float(self.config['mosq-max-age'])):
+            print "Mug dood:" , mosquito.age
             return False
 
         # Do the calculations for the next position of the mosquito

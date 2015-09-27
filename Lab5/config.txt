@@ -1,21 +1,21 @@
 {
     'grid-x': 256, # Max x for grid
     'grid-y': 256, # Max y for grid
-    'human-size': 36, # size of circle of human
+    'human-size': 26, # size of circle of human
     'mosquito-size': 3, # size of circle of mosquito
     'prevalence': 23, # The end-goal or stable prevalence value
-    'pop-human': 3000, # Total human population at start
-    'pop-mosq': 15000, # Total mosquito population at start
+    'pop-human': 5000, # Total human population at start
+    'pop-mosq': 30000, # Total mosquito population at start
     'death-rate': 0.007, # Change of dying after infection
     'death-delay': 15, # average amount of days before malaria is deadly
     'immunity-change': 0.05, # change someone becomes immune after surviving malaria
     'human-max-age': '', # 1 step is 1 day, thus the simulation will never reach human max age
-    'mosq-max-age': 18, # 1 step 1 day
-    'mosq-eggs': 120, # mosquitos lay between 80-180 eggs per batch
-    'mosq-days-per-batch': 4, # Mosquitos take on average 4 days to digest blood and make eggs
+    'mosq-max-age': 50, # 1 step 1 day
+    'mosq-eggs': 150, # mosquitos lay between 80-180 eggs per batch
+    'mosq-batches-lifetime': 10, # 9/12 batches per lifetime
     'prob-human-mosq': 0.9, # Probability that a mosquite gets infected
     'prob-mosq-human': 0.9, # Probability that a human gets infected
-    'init-distr-human': 0.0, # Initial infected humans
-    'init-distr-mosq': 1.0, # Initial infected mosquitos
-    'init-hungry-mosq': 1.0 # Initial hungry mosquitos
+    'init-distr-human': 0.23, # Initial infected humans
+    'init-distr-mosq': 0.5, # Initial infected mosquitos
+    'init-hungry-mosq': 0.5 # Initial hungry mosquitos
 }

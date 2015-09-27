@@ -52,17 +52,17 @@ class grid:
 
             # the mosquito has eaten and isn't hungry anymore
             mosquito.hungry = 0
-            
-            # check if it is ready to lay eggs
-            if mosquito.ovipositionCountdown >= self.config['mosq-days-per-batch']:
+
+            # check if it is going to lay eggs: change of lays per lifetime/ maximum mosquito age
+            # only if it has eaten and isn't hungry
+            if self.decision(self.config['mosq-batches-lifetime'] / float(self.config['mosq-max-age'])):
                 #print "Mother mosquito age:",mosquito.age
                 for x in xrange(0, self.config['mosq-eggs']):
-                    self.mosquitos.append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0))
-                print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
+                    self.mosquitos.append(m.mosquito(self.x, self.y, mosquito.t, mosquito.infected, 0, 0))
+                #print "eitjes gelegd, # mosquitos nu:", len(self.mosquitos)
 
         # there is no human to eat so the mosquito becomes hungry from moving
         else: 
-            mosquito.ovipositionCountdown += 1
             self.hungry = 1
 
     def decision(self,probability):
