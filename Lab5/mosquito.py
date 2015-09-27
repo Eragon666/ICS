@@ -45,4 +45,3 @@ class mosquito:
 
         # return tuple of new location
         return (self.x, self.y)
-
