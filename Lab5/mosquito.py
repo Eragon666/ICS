@@ -8,15 +8,14 @@ class mosquito:
     # 0 = infected = black, 1 = not infected = grey
     colorList = ['black','grey']
 
-    def __init__(self, x, y, t, infected, hungry):
+    def __init__(self, x, y, t, infected, hungry, age):
         """ Set the basic parameters for the mosquito """
         self.x = x
         self.y = y
         self.t = t
         self.infected = infected
         self.hungry = hungry
-        self.ovipositionCountdown = 0
-        self.age = np.random.randint(21)
+        self.age = age
 
     def getColor(self):
         return self.colorList[self.infected]
