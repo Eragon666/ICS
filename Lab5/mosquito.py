@@ -21,11 +21,13 @@ class mosquito:
         self.egg = False
         self.oviposition = 0
         self.config = config
+        self.prevX = 0 
+        self.prevY = 0
 
         if (egg == True):
             self.egg = True
         elif (ovi == True):
-            self.oviposition = random.randint(1, 3)
+            self.oviposition = random.randint(1, 4)
 
     def getColor(self):
         return self.colorList[self.infected]
@@ -58,14 +60,24 @@ class mosquito:
             if self.t >= t:
                 return (self.x, self.y)
             else:
-                # move in a random direction (hor., vert. or diag.), and do step
-                # if it is stays within boundaries
-                newY = self.y + np.random.randint(2) -1 
-                newX = self.x + np.random.randint(2) -1 
-                if 0 <= newY < maxY:
-                    self.y = newY
-                if 0 <= newX < maxX:
-                    self.x = newX
+                # find new location if it is the previous block
+                while (self.prevX == self.x and self.prevY == self.y):
+                    # move horizontal if staysbetween borders
+                    if np.random.randint(2) == 0:
+                        newX = self.x + np.random.randint(-1,2)
+                        if 0 <= newX < maxX:
+                            self.x = newX
+                    else:
+                        # move veritcal if it stays between borders
+                        newY = self.y + np.random.randint(-1,2) 
+                        if 0 <= newY < maxY:
+                            self.y = newY
+
+                #print "previous xy:",self.prevX , ",", self.prevY, " new:",self.x,",",self.y
+
+                # safe previous direction
+                self.prevX = self.x
+                self.prevY = self.y
 
             self.t = t
             self.age += 1
