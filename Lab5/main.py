@@ -288,7 +288,7 @@ if __name__ == '__main__':
         endSteps2 = time.time()
         print "Step number:",i, " steptime:",endSteps-startSteps, " Plotter:",endSteps2-startSteps2
 
-    print 'People died from Malaria: ' + str(sim.deads) + ', cured = ' + str(sim.cured) + ', immune = ' + str(sim.immune)
+    print 'People died from Malaria: ' + str(sim.deads) + ', cured = ' + str(sim.cured) + ', immune = ' + str(sim.immune) + ' infected = ' + str(sim.infected)
 
     #print sim.plotSize
 
