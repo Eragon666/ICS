@@ -4,8 +4,8 @@
     'human-size': 26, # size of circle of human
     'mosquito-size': 3, # size of circle of mosquito
     'prevalence': 23, # The end-goal or stable prevalence value
-    'pop-human': 5000, # Total human population at start
-    'pop-mosq': 30000, # Total mosquito population at start
+    'pop-human': 10000, # Total human population at start
+    'pop-mosq': 50000, # Total mosquito population at start
     'death-rate': 0.007, # Change of dying after infection
     'death-delay': 15, # average amount of days before malaria is deadly
     'immunity-change': 0.05, # change someone becomes immune after surviving malaria
