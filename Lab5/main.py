@@ -180,6 +180,8 @@ class simulation():
         # in the initial state. Based on the initial distribution.
         infected = (np.random.rand(popMosq) < self.config['init-distr-mosq']).astype(int) 
         hungry = (np.random.rand(popMosq) < self.config['init-hungry-mosq']).astype(int)
+        egg = (np.random.rand(popMosq) < self.config['init-egg']).astype(int)
+        ovi = (np.random.rand(popMosq) < self.config['init-ovi']).astype(int)
 
         t = self.t
         randint = np.random.randint
@@ -188,7 +190,7 @@ class simulation():
         for i in xrange(1, popMosq-1):
             (x,y) = self.getCoordinates()
             self.grid[x][y].flyIn(m.mosquito(x, y, t, infected[i], hungry[i],
-                randint(maxAge)))
+                randint(1, maxAge), self.config, ovi=ovi[i], egg=egg[i]))
 
     def stepMosquitos(self, x, y):
         """ Calculate the step for the mosquitos """
