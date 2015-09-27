@@ -1,15 +1,15 @@
 #!/usr/bin/pythony
 
 import numpy as np
-import random
 
 class grid:
 
-    def __init__(self, x, y):
+    def __init__(self, x, y,config):
         self.x = x
         self.y = y
         self.human = None
         self.mosquitos = []
+        self.config = config
 
     def checkFreedom(self):
         """Check if the human can live here or that there is already an
@@ -31,20 +31,42 @@ class grid:
         """Fly the mosquito into the cell, multiple mosquitos can be in one
         cell"""
         self.mosquitos.append(mosquito)
-        #self.devourHumans(mosquito)
+        self.devourHumans(mosquito)
 
     def devourHumans(self,mosquito):
-        """ eat a human if there is one and the mosquito hungry """
+        """ eat a human if there is one and the is mosquito hungry """
+        #print "Devour human: ", self.human , " Hunger:", mosquito.hungry
+
         if self.human != None and mosquito.hungry == 1:
             # if the human is infected, so is the mosquito based on probability
-            if self.human.status == 1 and decision(0.9):
+            if self.human.status == 1 and self.decision(self.config['prob-human-mosq']):
                 mosquito.infected = 1
             # if the human is not immune and mosq is infected, infect human based on probability
-            elif self.human.status != 2 and mosquito.infected == 1 and decision(0.8):
+            elif self.human.status != 2 and mosquito.infected == 1 and self.decision(self.config['prob-mosq-human']):
                 self.human.status = 1
 
-    def decision(probability):
-        return random.random() < probability
+                # check if the infection is fatal
+                if (self.decision(self.config['death-rate'])):
+                    self.fatalInfection = 1
+
+            # the mosquito has eaten and isn't hungry anymore
+            mosquito.hungry = 0
+            
+
+            # check if it is ready to lay eggs
+            if ovipositionCountdown >= self.config['mosq-days-per-batch']:
+                for x in xrange(0,self.conf['mosq-eggs']):
+                    self.mosquitos.append(m.mosquito(x, y, self.t, mosquito.infected, 0))
+
+
+        # there is no human to eat so the mosquito becomes hungry from moving
+        else: 
+            self.ovipositionCountdown += 1
+            self.hungry = 1
+
+    def decision(self,probability):
+        """ Makes a decision based on a probability """
+        return np.random.random_sample() < probability
 
     def getMosquitos(self):
         """ return the list of mosquitos in this cell """
@@ -58,9 +80,9 @@ class grid:
         """ return inhabitants in current cell """
 
         if self.human != None:
-            return (self.human.getColor(), self.human.size)
+            return (self.human.getColor(), int(self.config['human-size']))
         elif not self.mosquitos:
             return (False, False)
         else:
-            return (self.mosquitos[0].getColor(), self.mosquitos[0].size)
+            return (self.mosquitos[0].getColor(), int(self.config['mosquito-size']))
 
